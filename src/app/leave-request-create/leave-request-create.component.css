@@ -1,0 +1,34 @@
+.leave-request-create-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .leave-request-create-container label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  .leave-request-create-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+  }
+  button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .success-message {
+    margin-top: 20px;
+    color: green;
+    font-weight: bold;
+  }
+  

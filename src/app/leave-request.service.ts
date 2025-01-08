@@ -24,4 +24,11 @@ export class LeaveRequestService {
     });
     return this.http.get(`${this.baseUrl}/api/LeaveRequest`, { headers });
   }
+
+  createLeaveRequest(request: { startDate: string; endDate: string }): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    });
+    return this.http.post(`${this.baseUrl}/api/LeaveRequest`, request, { headers });
+  }
 }

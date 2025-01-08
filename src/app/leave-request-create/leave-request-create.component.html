@@ -1,0 +1,19 @@
+<div class="leave-request-create-container">
+    <h2>İzin Talebi Oluştur</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div>
+        <label for="startDate">Başlangıç Tarihi:</label>
+        <input type="date" id="startDate" [(ngModel)]="startDate" name="startDate" required />
+      </div>
+      <div>
+        <label for="endDate">Bitiş Tarihi:</label>
+        <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate" required />
+      </div>
+      <button type="submit">Gönder</button>
+      <button type="button" (click)="goBack()">Geri Dön</button>
+    </form>
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+  </div>
+  
