@@ -11,27 +11,34 @@ export class LeaveRequestCreateComponent {
   startDate: string = '';
   endDate: string = '';
   successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private leaveRequestService: LeaveRequestService, private router: Router) {}
 
   onSubmit(): void {
+    if (!this.startDate || !this.endDate) {
+      this.errorMessage = 'İzin başlangıç veya bitiş alanları boş bırakılamaz.';
+      return;
+    }
+
     const leaveRequest = {
-      startDate: new Date(this.startDate).toISOString(),
-      endDate: new Date(this.endDate).toISOString()
+      startDate: this.startDate,
+      endDate: this.endDate
     };
-  
+
     this.leaveRequestService.createLeaveRequest(leaveRequest).subscribe({
-      next: (response) => {
-        this.successMessage = response.message;
+      next: () => {
+        this.successMessage = 'İzin talebi başarılı bir şekilde oluşturuldu.';
+        this.errorMessage = null;
         setTimeout(() => this.router.navigate(['/leave-request']), 2000);
       },
       error: (err) => {
-        alert(err.error?.message || 'İzin talebi oluşturulamadı. Lütfen tekrar deneyin.');
+        this.successMessage = null;
+        this.errorMessage = 'İzin talebi oluşturulamadı. Lütfen tekrar deneyin.';
         console.error(err);
       }
     });
   }
-  
 
   goBack(): void {
     this.router.navigate(['/leave-request']);

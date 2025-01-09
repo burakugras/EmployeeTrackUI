@@ -32,17 +32,17 @@ export class LeaveRequestService {
     return this.http.post(`${this.baseUrl}/api/LeaveRequest`, request, { headers });
   }
 
-  approveLeaveRequest(requestId: string): Observable<any> {
+  approveLeaveRequest(requestId: string): Observable<any> { //int?
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`
     });
-    return this.http.put(`${this.baseUrl}/api/LeaveRequest/${requestId}/approve`, null, { headers });
+    return this.http.put(`${this.baseUrl}/api/LeaveRequest/${requestId}/approve`, null, { headers,responseType:'json' });
   }
 
-  rejectLeaveRequest(requestId: string): Observable<any> {
+  rejectLeaveRequest(requestId: string): Observable<any> { //int?
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`
     });
-    return this.http.put(`${this.baseUrl}/api/LeaveRequest/${requestId}/reject`, null, { headers });
+    return this.http.put(`${this.baseUrl}/api/LeaveRequest/${requestId}/reject`, null, { headers,responseType:'json' });
   }
 }

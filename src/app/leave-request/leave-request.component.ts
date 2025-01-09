@@ -15,13 +15,12 @@ export class LeaveRequestComponent implements OnInit {
   constructor(private leaveRequestService: LeaveRequestService, private router: Router) {}
 
   ngOnInit(): void {
-    this.checkUserRole(); // Kullanıcı rolünü kontrol et
-    this.getLeaveRequests(); // İzin taleplerini getir
+    this.checkUserRole();
+    this.getLeaveRequests();
   }
 
   getLeaveRequests(): void {
     if (this.isManagerOrHRManager) {
-      // Manager veya HRManager ise tüm izin taleplerini getir
       this.leaveRequestService.getAllRequests().subscribe({
         next: (data) => {
           console.log('Leave Requests (Manager/HRManager):', data);
@@ -32,7 +31,6 @@ export class LeaveRequestComponent implements OnInit {
         }
       });
     } else {
-      // Diğer çalışanlar için kendi izin taleplerini getir
       const employeeId = this.getEmployeeIdFromToken();
       if (employeeId) {
         this.leaveRequestService.getEmployeeRequests(employeeId).subscribe({
@@ -79,24 +77,42 @@ export class LeaveRequestComponent implements OnInit {
 
   approveRequest(requestId: string): void {
     this.leaveRequestService.approveLeaveRequest(requestId).subscribe({
-      next: () => {
-        alert('İzin talebi onaylandı.');
+      next: (response) => {
+        if (response && response.message) {
+          alert(response.message); // Backend'den dönen JSON içindeki mesajı göster
+        } else {
+          alert('İzin talebi başarıyla onaylandı.');
+        }
         this.getLeaveRequests();
       },
       error: (err) => {
         console.error('Onaylama hatası:', err);
+        if (err.error?.message) {
+          alert(err.error.message); // Hata mesajını göster
+        } else {
+          alert('Onaylama sırasında bir hata oluştu.');
+        }
       }
     });
   }
 
-  rejectRequest(requestId: string): void {
+  rejectRequest(requestId: string): void { 
     this.leaveRequestService.rejectLeaveRequest(requestId).subscribe({
-      next: () => {
-        alert('İzin talebi reddedildi.');
+      next: (response) => {
+        if (response && response.message) {
+          alert(response.message); // Backend'den dönen JSON içindeki mesajı göster
+        } else {
+          alert('İzin talebi başarıyla reddedildi.');
+        }
         this.getLeaveRequests();
       },
       error: (err) => {
         console.error('Reddetme hatası:', err);
+        if (err.error?.message) {
+          alert(err.error.message); // Hata mesajını göster
+        } else {
+          alert('Reddetme sırasında bir hata oluştu.');
+        }
       }
     });
   }
