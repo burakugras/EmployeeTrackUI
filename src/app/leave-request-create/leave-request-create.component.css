@@ -4,13 +4,16 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    font-family:sans-serif;
   }
   .leave-request-create-container label {
     display: block;
     margin-bottom: 8px;
   }
   .leave-request-create-container input {
-    width: 100%;
+    width: 92%;
     padding: 8px;
     margin-bottom: 16px;
   }

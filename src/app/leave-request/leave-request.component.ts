@@ -24,7 +24,13 @@ export class LeaveRequestComponent implements OnInit {
       this.leaveRequestService.getAllRequests().subscribe({
         next: (data) => {
           console.log('Leave Requests (Manager/HRManager):', data);
-          this.leaveRequests = data;
+          this.leaveRequests = data.map((request: any) => ({
+            id: request.id,
+            startDate: request.startDate,
+            endDate: request.endDate,
+            status: request.status,
+            employeeName: `${request.employee.firstName} ${request.employee.lastName}`
+          }));
         },
         error: (err) => {
           console.error('Hata:', err);
@@ -36,7 +42,13 @@ export class LeaveRequestComponent implements OnInit {
         this.leaveRequestService.getEmployeeRequests(employeeId).subscribe({
           next: (data) => {
             console.log('Leave Requests (Employee):', data);
-            this.leaveRequests = data;
+            this.leaveRequests = data.map((request: any) => ({
+              id: request.id,
+              startDate: request.startDate,
+              endDate: request.endDate,
+              status: request.status,
+              employeeName: `${this.userName}`
+            }));
           },
           error: (err) => {
             console.error('Hata:', err);
@@ -45,6 +57,7 @@ export class LeaveRequestComponent implements OnInit {
       }
     }
   }
+  
 
   getEmployeeIdFromToken(): string | null {
     const token = localStorage.getItem('token');
@@ -67,6 +80,9 @@ export class LeaveRequestComponent implements OnInit {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       console.log('Token Payload:', payload);
+
+      this.userName = `${payload.FirstName} ${payload.LastName}`;
+
       const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       this.isManagerOrHRManager = role === 'Manager' || role === 'HRManager';
       console.log('isManagerOrHRManager:', this.isManagerOrHRManager);
@@ -77,42 +93,24 @@ export class LeaveRequestComponent implements OnInit {
 
   approveRequest(requestId: string): void {
     this.leaveRequestService.approveLeaveRequest(requestId).subscribe({
-      next: (response) => {
-        if (response && response.message) {
-          alert(response.message); // Backend'den dönen JSON içindeki mesajı göster
-        } else {
-          alert('İzin talebi başarıyla onaylandı.');
-        }
+      next: () => {
+        //alert(response);
         this.getLeaveRequests();
       },
       error: (err) => {
         console.error('Onaylama hatası:', err);
-        if (err.error?.message) {
-          alert(err.error.message); // Hata mesajını göster
-        } else {
-          alert('Onaylama sırasında bir hata oluştu.');
-        }
       }
     });
   }
 
-  rejectRequest(requestId: string): void { 
+  rejectRequest(requestId: string): void {
     this.leaveRequestService.rejectLeaveRequest(requestId).subscribe({
-      next: (response) => {
-        if (response && response.message) {
-          alert(response.message); // Backend'den dönen JSON içindeki mesajı göster
-        } else {
-          alert('İzin talebi başarıyla reddedildi.');
-        }
+      next: () => {
+        //alert(response);
         this.getLeaveRequests();
       },
       error: (err) => {
         console.error('Reddetme hatası:', err);
-        if (err.error?.message) {
-          alert(err.error.message); // Hata mesajını göster
-        } else {
-          alert('Reddetme sırasında bir hata oluştu.');
-        }
       }
     });
   }

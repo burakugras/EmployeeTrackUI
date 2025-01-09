@@ -21,6 +21,11 @@ export class LeaveRequestCreateComponent {
       return;
     }
 
+    if (new Date(this.endDate) < new Date(this.startDate)) {
+      this.errorMessage = 'Bitiş tarihi, başlangıç tarihinden önce olamaz.';
+      return;
+    }
+
     const leaveRequest = {
       startDate: this.startDate,
       endDate: this.endDate
@@ -34,8 +39,8 @@ export class LeaveRequestCreateComponent {
       },
       error: (err) => {
         this.successMessage = null;
-        this.errorMessage = 'İzin talebi oluşturulamadı. Lütfen tekrar deneyin.';
-        console.error(err);
+        this.errorMessage = err.error?.message || 'İzin talebi oluşturulamadı. Lütfen tekrar deneyin.';
+        console.error('Hata:', err);
       }
     });
   }

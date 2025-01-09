@@ -1,27 +1,37 @@
 <div class="leave-request-container">
     <h2>Merhaba {{ userName }}</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Status</th>
-          <th *ngIf="isManagerOrHRManager">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let request of leaveRequests">
-          <td>{{ request.startDate | date: 'dd/MM/yyyy' }}</td> <!-- Daha temiz bir tarih görüntüsü ekledim-->
-          <td>{{ request.endDate | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ request.status }}</td>
-          <td *ngIf="isManagerOrHRManager">
-            <button (click)="approveRequest(request.id)">Onayla</button>
-            <button (click)="rejectRequest(request.id)">Reddet</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button (click)="createLeaveRequest()">İzin Talebi Oluştur</button>
-    <button (click)="logout()">Çıkış Yap</button>
-  </div>
-  
+    <form>
+        <div class="leave-request-header">
+            <div class="leave-request-item">Ad Soyad</div>
+            <div class="leave-request-item">İzin Başlangıç Tarihi</div>
+            <div class="leave-request-item">İzin Bitiş Tarihi</div>
+            <div class="leave-request-item">Durum</div>
+            <div class="leave-request-item" *ngIf="isManagerOrHRManager">Aksiyon</div>
+        </div>
+        <div *ngFor="let request of leaveRequests" class="leave-request-row">
+            <div class="leave-request-item">{{ request.employeeName }}</div>
+            <div class="leave-request-item">{{ request.startDate | date: 'dd/MM/yyyy' }}</div>
+            <div class="leave-request-item">{{ request.endDate | date: 'dd/MM/yyyy' }}</div>
+            <div class="leave-request-item">
+                <span
+                    [ngClass]="{
+                        'text-green': request.status === 'Approved',
+                        'text-red': request.status === 'Rejected',
+                        'text-orange': request.status === 'Pending'
+                    }">
+                    <ng-container *ngIf="request.status === 'Approved'">Onaylandı</ng-container>
+                    <ng-container *ngIf="request.status === 'Rejected'">Reddedildi</ng-container>
+                    <ng-container *ngIf="request.status === 'Pending'">Bekliyor</ng-container>
+                </span>
+            </div>
+            <div class="leave-request-item" *ngIf="isManagerOrHRManager">
+                <button class="action-button-approve" type="button" (click)="approveRequest(request.id)">Onayla</button>
+                <button class="action-button-reject" type="button" (click)="rejectRequest(request.id)">Reddet</button>
+            </div>
+        </div>
+    </form>
+    <div class="leave-request-actions-global">
+        <button class="global-button" type="button" (click)="createLeaveRequest()">İzin Talebi Oluştur</button>
+        <button class="global-button" type="button" (click)="logout()">Çıkış Yap</button>
+    </div>
+</div>

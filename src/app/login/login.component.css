@@ -3,11 +3,14 @@
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
+    border-radius: 2px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    font-family:sans-serif;
   }
   .login-container input {
-    width: 100%;
+    width: 92%;
     margin: 10px 0;
     padding: 8px;
   }
@@ -18,6 +21,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    float: right;
   }
   .login-container button:hover {
     background-color: #0056b3;
