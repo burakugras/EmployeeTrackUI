@@ -3,16 +3,23 @@
     <table>
       <thead>
         <tr>
+          <th>Ad ve Soyad</th> <!-- Yeni sütun -->
           <th>Start Date</th>
           <th>End Date</th>
           <th>Status</th>
+          <th *ngIf="isManagerOrHRManager">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let request of leaveRequests">
+          <td>{{ request.employee?.firstName }} {{ request.employee?.lastName }}</td> <!-- Ad ve Soyad -->
           <td>{{ request.startDate }}</td>
           <td>{{ request.endDate }}</td>
           <td>{{ request.status }}</td>
+          <td *ngIf="isManagerOrHRManager">
+            <button (click)="approveRequest(request.id)">Onayla</button>
+            <button (click)="rejectRequest(request.id)">Reddet</button>
+          </td>
         </tr>
       </tbody>
     </table>

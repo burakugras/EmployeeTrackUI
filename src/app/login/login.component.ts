@@ -16,13 +16,11 @@ export class LoginComponent {
   onLogin() {
     this.authService.login(this.email, this.password).subscribe({
       next: (response: any) => {
-        // JWT Token'ı Local Storage'da saklama
         localStorage.setItem('token', response.token);
-        // Kullanıcıyı Leave Request sayfasına yönlendirme
         this.router.navigate(['/leave-request']);
       },
       error: (err) => {
-        alert('Login failed. Please check your credentials.');
+        alert('Lütfen giriş yapınız.');
       }
     });
   }
