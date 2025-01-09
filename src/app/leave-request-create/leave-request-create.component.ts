@@ -16,21 +16,22 @@ export class LeaveRequestCreateComponent {
 
   onSubmit(): void {
     const leaveRequest = {
-      startDate: this.startDate,
-      endDate: this.endDate
+      startDate: new Date(this.startDate).toISOString(),
+      endDate: new Date(this.endDate).toISOString()
     };
-
+  
     this.leaveRequestService.createLeaveRequest(leaveRequest).subscribe({
-      next: () => {
-        this.successMessage = 'İzin talebi başarılı bir şekilde oluşturuldu.';
+      next: (response) => {
+        this.successMessage = response.message;
         setTimeout(() => this.router.navigate(['/leave-request']), 2000);
       },
       error: (err) => {
-        alert('İzin talebi oluşturulamadı. Lütfen tekrar deneyin.');
+        alert(err.error?.message || 'İzin talebi oluşturulamadı. Lütfen tekrar deneyin.');
         console.error(err);
       }
     });
   }
+  
 
   goBack(): void {
     this.router.navigate(['/leave-request']);
