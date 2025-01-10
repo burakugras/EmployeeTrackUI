@@ -14,7 +14,7 @@ import { LeaveRequestCreateComponent } from './leave-request-create/leave-reques
     AppComponent,
     LoginComponent,
     LeaveRequestComponent,
-    LeaveRequestCreateComponent // Leave Request bileşenini ekledik
+    LeaveRequestCreateComponent
   ],
   imports: [
     BrowserModule,

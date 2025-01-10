@@ -1,8 +1,13 @@
 <div class="leave-request-container">
-    <h2>Merhaba {{ userName }}</h2>
+    <h2>
+        Merhaba {{ userName }} 
+        <span class="remaining-leaves">(Kalan izin günleriniz: {{ userRemainingLeaves }})</span>
+    </h2>
+
     <form>
         <div class="leave-request-header">
             <div class="leave-request-item">Ad Soyad</div>
+            <div class="leave-request-item">Kalan İzin Günleri</div>
             <div class="leave-request-item">İzin Başlangıç Tarihi</div>
             <div class="leave-request-item">İzin Bitiş Tarihi</div>
             <div class="leave-request-item">Durum</div>
@@ -10,6 +15,7 @@
         </div>
         <div *ngFor="let request of leaveRequests" class="leave-request-row">
             <div class="leave-request-item">{{ request.employeeName }}</div>
+            <div class="leave-request-item">{{ request.remainingLeaves }}</div>
             <div class="leave-request-item">{{ request.startDate | date: 'dd/MM/yyyy' }}</div>
             <div class="leave-request-item">{{ request.endDate | date: 'dd/MM/yyyy' }}</div>
             <div class="leave-request-item">
@@ -30,6 +36,7 @@
             </div>
         </div>
     </form>
+
     <div class="leave-request-actions-global">
         <button class="global-button" type="button" (click)="createLeaveRequest()">İzin Talebi Oluştur</button>
         <button class="global-button" type="button" (click)="logout()">Çıkış Yap</button>

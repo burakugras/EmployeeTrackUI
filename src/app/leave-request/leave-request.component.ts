@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LeaveRequestComponent implements OnInit {
   userName: string = '';
+  userRemainingLeaves: number = 0;
   leaveRequests: any[] = [];
   isManagerOrHRManager: boolean = false;
 
@@ -17,6 +18,7 @@ export class LeaveRequestComponent implements OnInit {
   ngOnInit(): void {
     this.checkUserRole();
     this.getLeaveRequests();
+    this.fetchRemainingLeaves();
   }
 
   getLeaveRequests(): void {
@@ -29,7 +31,8 @@ export class LeaveRequestComponent implements OnInit {
             startDate: request.startDate,
             endDate: request.endDate,
             status: request.status,
-            employeeName: `${request.employee.firstName} ${request.employee.lastName}`
+            employeeName: `${request.employee.firstName} ${request.employee.lastName}`,
+            remainingLeaves: request.employee.remainingLeaves
           }));
         },
         error: (err) => {
@@ -47,7 +50,8 @@ export class LeaveRequestComponent implements OnInit {
               startDate: request.startDate,
               endDate: request.endDate,
               status: request.status,
-              employeeName: `${this.userName}`
+              employeeName: this.userName,
+              remainingLeaves: request.employee.remainingLeaves
             }));
           },
           error: (err) => {
@@ -57,7 +61,22 @@ export class LeaveRequestComponent implements OnInit {
       }
     }
   }
-  
+
+  fetchRemainingLeaves(): void {
+    const employeeId = this.getEmployeeIdFromToken();
+    if (employeeId) {
+      this.leaveRequestService.getEmployeeRequests(employeeId).subscribe({
+        next: (data) => {
+          if (data.length > 0) {
+            this.userRemainingLeaves = data[0].employee.remainingLeaves;
+          }
+        },
+        error: (err) => {
+          console.error('Kalan izin günleri alınırken hata oluştu:', err);
+        }
+      });
+    }
+  }
 
   getEmployeeIdFromToken(): string | null {
     const token = localStorage.getItem('token');
@@ -94,7 +113,6 @@ export class LeaveRequestComponent implements OnInit {
   approveRequest(requestId: string): void {
     this.leaveRequestService.approveLeaveRequest(requestId).subscribe({
       next: () => {
-        //alert(response);
         this.getLeaveRequests();
       },
       error: (err) => {
@@ -106,7 +124,6 @@ export class LeaveRequestComponent implements OnInit {
   rejectRequest(requestId: string): void {
     this.leaveRequestService.rejectLeaveRequest(requestId).subscribe({
       next: () => {
-        //alert(response);
         this.getLeaveRequests();
       },
       error: (err) => {
